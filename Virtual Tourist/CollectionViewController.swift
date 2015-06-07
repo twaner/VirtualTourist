@@ -42,11 +42,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.touristCollectionView.dataSource = self
         
 //        self.getPhotosForLocation()
-        // Get data
-        if self.mapAnnotation.photos.isEmpty {
-            self.populate()
-        }
-        
     }
     
     
@@ -92,6 +87,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             self.touristCollectionView.reloadData()
                         })
+                        self.saveContext()
                     } else {
                         let error = NSError(domain: "Movie for Person Parsing. Cant find cast in \(result)", code: 0, userInfo: nil)
                         println(error)
@@ -106,6 +102,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        // Get data
+        if self.mapAnnotation.photos.isEmpty {
+            self.populate()
+        }
         self.setMap()
     }
     
@@ -135,8 +135,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     // MARK: UICollectionViewDataSource
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        println("self.photoArrayTmp.count \(self.photoArrayTmp.count)")
-//        return self.photoArrayTmp.count
         let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
         println("number of cells \(sectionInfo.numberOfObjects)")
         return sectionInfo.numberOfObjects
@@ -148,14 +146,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func configureCell2(cell: TouristCollectionViewCell, photo: Photo) {
         var photoImage = UIImage(named: "Blank52")
-        cell.cellImage = nil
+        cell.cellImage.image = nil
         if photo.imagePath == nil || photo.imagePath == "" {
             photoImage = UIImage(named: "Blank52")
-        }
-//        else if photo.imagePath != nil {
-//            photoImage = photo.photoImage
-//        }
-        else {
+        } else {
             let task = TouristClient.sharedInstance().taskForCreatingImage(photo.imagePath!) { (imageData, error) -> Void in
                 if let error = error {
                     println("Poster download error: \(error.localizedDescription)")
@@ -170,7 +164,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
             }
             cell.taskToCancelIfCellIsReused = task
         }
-        cell.cellImage.image = photoImage
+        println("photoImage \(photoImage)")
+        cell.cellImage.image = photoImage!
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -181,39 +176,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         
         return cell
     }
-
-//    Probably can remove this whole thing
-//    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! TouristCollectionViewCell
-//        // temp image until its downloaded
-//        cell.cellImage.image = UIImage(named: "Blank52")
-//        
-//        if !photoArrayTmp[0].isEmpty {
-//            cell.activityIndicator.hidden = false
-//            cell.activityIndicator.startAnimating()
-//            let photo = photoArrayTmp[indexPath.row] as [String: AnyObject]
-//            let imageUrlString = photo["url_m"] as? String
-//            let imageURL = NSURL(string: imageUrlString!)
-//            
-//            let request: NSURLRequest = NSURLRequest(URL: imageURL!)
-//            let mainQueue = NSOperationQueue.mainQueue()
-//            NSURLConnection.sendAsynchronousRequest(request, queue: mainQueue, completionHandler: { (respnse, data, error) -> Void in
-//                if (error != nil) {
-//                    println("ERROR: \(error.localizedDescription)")
-//                } else {
-//                    let image = UIImage(data: data)
-//                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                        if let cellToUpdate = collectionView.cellForItemAtIndexPath(indexPath) as? TouristCollectionViewCell {
-//                            cell.activityIndicator.hidden = true
-//                            cell.activityIndicator.stopAnimating()
-//                            cellToUpdate.cellImage.image = image
-//                        }
-//                    })
-//                }
-//            })
-//        }
-//        return cell
-//    }
     
     // MARK: - Cell Helper method
     
@@ -235,7 +197,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.updatedIndexPaths = [NSIndexPath]()
         println("controllerWillChangeContent")
     }
-    
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
@@ -328,5 +289,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     var sharedContext: NSManagedObjectContext {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
+    }
+    
+    func saveContext() {
+        CoreDataStackManager.sharedInstance().saveContext()
     }
 }

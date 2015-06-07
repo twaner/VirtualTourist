@@ -25,7 +25,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     var photoArrayTmp: [[String: AnyObject]] = []
     var mapAnnotation: Annotation!
     // NSFetchedResultsControllerDelegate with collection view
-    var selectedIndexPaths: [NSIndexPath]!
+    var selectedIndexPaths = [NSIndexPath]()
     var deletedIndexPaths: [NSIndexPath]!
     var updatedIndexPaths: [NSIndexPath]!
     var insertedIndexPaths: [NSIndexPath]!
@@ -134,6 +134,19 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     // MARK: UICollectionViewDataSource
     
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! TouristCollectionViewCell
+        
+        if let index = find(selectedIndexPaths, indexPath) {
+            selectedIndexPaths.removeAtIndex(index)
+        } else {
+            selectedIndexPaths.append(indexPath)
+        }
+        
+        self.deleteSelectedPhoto()
+    }
+    
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
         println("number of cells \(sectionInfo.numberOfObjects)")
@@ -144,7 +157,20 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         return self.fetchedResultsController.sections?.count ?? 0
     }
     
-    func configureCell2(cell: TouristCollectionViewCell, photo: Photo) {
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! TouristCollectionViewCell
+        cell.activityIndicator.hidden = false
+        cell.activityIndicator.startAnimating()
+        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        cell.cellImage.image = UIImage(named: "Blank52")
+        configureCell(cell, photo: photo)
+        
+        return cell
+    }
+    
+    // MARK: - Cell Helper methods
+    
+    func configureCell(cell: TouristCollectionViewCell, photo: Photo) {
         var photoImage = UIImage(named: "Blank52")
         cell.cellImage.image = nil
         if photo.imagePath == nil || photo.imagePath == "" {
@@ -158,6 +184,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                     let image = UIImage(data: data)
                     photo.photoImage = image
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        cell.activityIndicator.stopAnimating()
+                        cell.activityIndicator.hidden = true
                         cell.cellImage.image = image
                     })
                 }
@@ -167,27 +195,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         println("photoImage \(photoImage)")
         cell.cellImage.image = photoImage!
     }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! TouristCollectionViewCell
-        let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        cell.cellImage.image = UIImage(named: "Blank52")
-        configureCell2(cell, photo: photo)
-        
-        return cell
-    }
-    
-    // MARK: - Cell Helper method
-    
-    func addImage() {
-        
-    }
-    
-    func configureCell(cell: TouristCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
-        if let photo = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Photo {
-            cell.cellImage.image = photo.image
-        }
-    }
+
     
     // MARK: - Fetched Results Controller Delegate
     
@@ -242,8 +250,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     // MARK: - Core Data helpers
     
     func deleteAllPhotos() {
-        for q in fetchedResultsController.fetchedObjects as! [Photo] {
-            sharedContext.deleteObject(q)
+        for photo in fetchedResultsController.fetchedObjects as! [Photo] {
+            sharedContext.deleteObject(photo)
         }
     }
     
@@ -255,8 +263,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         
         for photo in photoToDelete {
-            sharedContext.delete(photo)
+            sharedContext.deleteObject(photo)
         }
+        self.selectedIndexPaths = [NSIndexPath]()
     }
     
     func updateCollectionButton() {
@@ -266,18 +275,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
             self.collectionButton.title = "Clear All"
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    
-    // MARK: - Core Data Helpers
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")

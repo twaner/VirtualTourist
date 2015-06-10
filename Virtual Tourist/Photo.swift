@@ -34,7 +34,6 @@ class Photo: NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         self.imagePath = dictionary[Keys.Url] as? String
-//        self.image = image
         self.title = dictionary[Keys.Title] as? String
     }
     

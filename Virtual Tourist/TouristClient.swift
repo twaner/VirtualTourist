@@ -69,7 +69,9 @@ class TouristClient {
         return error
     }
     
-    /* Helper: Given raw JSON, return a usable Foundation object */
+    /* 
+    *Helper: Given raw JSON, return a usable Foundation object 
+    */
     class func parseJSONWithCompletionHandler(data: NSData, completionHandler: (result: AnyObject!, error: NSError?) -> Void) {
         
         var parsingError: NSError? = nil

@@ -29,6 +29,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     var deletedIndexPaths: [NSIndexPath]!
     var updatedIndexPaths: [NSIndexPath]!
     var insertedIndexPaths: [NSIndexPath]!
+    var counter = 0
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +43,29 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         fetchedResultsController.delegate = self
         self.touristCollectionView.delegate = self
         self.touristCollectionView.dataSource = self
-        
-//        self.getPhotosForLocation()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.mapAnnotation.photos.isEmpty {
+            self.populate()
+        }
+        self.setMap()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: - IBActions
+    
+    @IBAction func collectionButtonTapped(sender: UIBarButtonItem) {
+        // Delete all photos
+        self.deleteAllPhotos()
+        // Get new photos
+    }
+    
+    // MARK: - Helper methods
     
     ///
     ///Uses the TouristClient in order to retrieve an array of dictionaries that is used to populate
@@ -100,15 +122,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        // Get data
-        if self.mapAnnotation.photos.isEmpty {
-            self.populate()
-        }
-        self.setMap()
-    }
-    
     // This might not be need/clean up and jsut drop the pin
     func setMap() {
         
@@ -127,10 +140,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         
         self.mapView.addAnnotation(self.annotation!)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     // MARK: UICollectionViewDataSource
     
@@ -145,7 +154,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         
         self.deleteSelectedPhoto()
     }
-    
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
@@ -170,6 +178,11 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     // MARK: - Cell Helper methods
     
+    ///
+    ///Configures the TouristCollectionViewCell. Sets a placeholder image; checks to see if a photo exists; downloads and sets image.
+    ///
+    ///:param: cell TouristCollectionViewCell to be updated.
+    ///:param: photo Photo to display in the cell.
     func configureCell(cell: TouristCollectionViewCell, photo: Photo) {
         var photoImage = UIImage(named: "Blank52")
         cell.cellImage.image = nil
@@ -192,7 +205,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
             }
             cell.taskToCancelIfCellIsReused = task
         }
-        println("photoImage \(photoImage)")
         cell.cellImage.image = photoImage!
     }
 
@@ -249,12 +261,19 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
 
     // MARK: - Core Data helpers
     
+    ///
+    /// Deletes all photo objects related to Annotation
+    ///
     func deleteAllPhotos() {
         for photo in fetchedResultsController.fetchedObjects as! [Photo] {
             sharedContext.deleteObject(photo)
+            self.saveContext()
         }
     }
     
+    ///
+    /// Deletes a photo object related to Annotation
+    ///
     func deleteSelectedPhoto() {
         var photoToDelete = [Photo]()
         
@@ -264,10 +283,14 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         
         for photo in photoToDelete {
             sharedContext.deleteObject(photo)
+            self.saveContext()
         }
         self.selectedIndexPaths = [NSIndexPath]()
     }
     
+    ///
+    /// Updates text on collection Button
+    ///
     func updateCollectionButton() {
         if self.selectedIndexPaths.count > 0 {
             self.collectionButton.title = "New Collection"
@@ -288,6 +311,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         return CoreDataStackManager.sharedInstance().managedObjectContext!
     }
     
+    ///
+    /// Calls the saveContext() method on the sharedInstance
+    ///
     func saveContext() {
         CoreDataStackManager.sharedInstance().saveContext()
     }

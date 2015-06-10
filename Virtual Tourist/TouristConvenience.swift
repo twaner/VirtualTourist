@@ -54,7 +54,7 @@ extension TouristClient {
     func taskForCreatingImage(filePath: String, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask {
         let url = NSURL(string: filePath)
         
-        println("taskForCreatingImage imageUrl: \(filePath)")
+//        println("taskForCreatingImage imageUrl: \(filePath)")
         
         let request = NSURLRequest(URL: NSURL(string: filePath)!)
         let task = session.dataTaskWithRequest(request) {

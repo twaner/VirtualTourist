@@ -48,6 +48,9 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         // TODO: get map state from core data if it exists
         self.annotations = self.fetchAllPins()
         println("PIN COUNT: \(self.annotations.count)")
+        for i in self.annotations {
+            println("\(i.title) \(i.latitude) \(i.longitude)")
+        }
         
         if self.annotations.count > 0 {
             var pins = placeAnnotations()
@@ -163,14 +166,14 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     }
     
     func mapViewDidFinishLoadingMap(mapView: MKMapView!) {
-        println("mapViewDidFinishLoadingMap")
-        println("\(mapView.region.span.longitudeDelta) \(mapView.region.span.latitudeDelta)")
+//        println("mapViewDidFinishLoadingMap")
+//        println("\(mapView.region.span.longitudeDelta) \(mapView.region.span.latitudeDelta)")
         self.displayActivityView(false)
     }
 
     func mapViewDidFinishRenderingMap(mapView: MKMapView!, fullyRendered: Bool) {
         // TODO: stop spinner
-        println("mapViewDidFinishRenderingMap")
+//        println("mapViewDidFinishRenderingMap")
         self.displayActivityView(false)
     }
     
@@ -217,7 +220,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         var userLocation: CLLocation = locations[0] as! CLLocation
         self.mapUpdater(userLocation, mapView: self.mapView)
-        println("locationManager - \(userLocation)")
+//        println("locationManager - \(userLocation)")
     }
 
     // MARK: - Helper methods
@@ -269,7 +272,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func fetchPin(lat: Double, long: Double) -> Annotation? {
         let error: NSErrorPointer = nil
         let fetchRequest = NSFetchRequest(entityName: "Annotation")
-
+        
         var lat = "\(lat)"
         var long = "\(long)"
         
@@ -279,6 +282,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         
         fetchRequest.predicate = compoundPredicate
         fetchRequest.sortDescriptors = []
+        let pin2 = self.sharedContext.executeFetchRequest(fetchRequest, error: error) as! [Annotation]
         let pin = self.sharedContext.executeFetchRequest(fetchRequest, error: error)?.first as! Annotation
         if error != nil {
             println("Error getting pin \(error)")

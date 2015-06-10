@@ -40,6 +40,8 @@ extension TouristClient {
         static let Longitude = "lon"
         static let Radius = "radius"
         static let Radius_Units = "radius_units"
+        static let Page = "page"
+        static let PerPage = "per_page"
     }
     
     struct JSONResponseKeys {

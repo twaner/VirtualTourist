@@ -172,6 +172,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         cell.cellImage.image = UIImage(named: "Blank52")
         configureCell(cell, photo: photo)
+        counter += 1
+        println("collectionView cellForItemAtIndexPath: \(counter)")
         
         return cell
     }

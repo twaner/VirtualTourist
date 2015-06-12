@@ -21,7 +21,8 @@ extension TouristClient {
     ///:param: completionHandler completionHandler for method.
     func flickrPhotosSearch(annotation: MKPointAnnotation, completionHandler: (success: Bool, result: AnyObject?, error: NSError?) -> Void) {
         
-        
+        let pageNumber = arc4random_uniform(20) + 1//arc4random_uniform(9999)
+        let pageStr = "\(pageNumber)"
         let latitude = annotation.coordinate.latitude
         let longitude = annotation.coordinate.longitude
         
@@ -30,11 +31,13 @@ extension TouristClient {
             ParamaterKeys.ApiKey: Constants.FlickrApiKey,
             ParamaterKeys.Latitude: latitude,
             ParamaterKeys.Longitude: longitude,
-            ParamaterKeys.Radius: "1",
+            ParamaterKeys.Radius: "2",
             ParamaterKeys.Radius_Units: "1m",
             ParamaterKeys.Extras: "url_m",
             ParamaterKeys.DataFormat: "json",
-            ParamaterKeys.No_JSON_Callback: "1"
+            ParamaterKeys.No_JSON_Callback: "1",
+            ParamaterKeys.PerPage: "100",
+            ParamaterKeys.Page: pageStr
         ]
         
         flickrGetHelper(Constants.GetPhotos, parameters: parameters) { (result, error) -> Void in

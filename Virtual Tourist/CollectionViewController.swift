@@ -30,6 +30,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     var updatedIndexPaths: [NSIndexPath]!
     var insertedIndexPaths: [NSIndexPath]!
     var counter = 0
+    var deletedCounter = 0
+    var downloaded = 0
     
     // MARK: - Lifecycle
     
@@ -47,8 +49,11 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        self.collectionButton.enabled = false
         if self.mapAnnotation.photos.isEmpty {
             self.populate()
+        } else {
+            self.collectionButton.enabled = true
         }
         self.setMap()
     }
@@ -63,6 +68,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         // Delete all photos
         self.deleteAllPhotos()
         // Get new photos
+        self.populate()
     }
     
     // MARK: - Helper methods
@@ -91,6 +97,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func populate() {
+        println("POPULATE COUNT \(self.mapAnnotation.photos.count)")
         if self.mapAnnotation.photos.isEmpty {
             // Call Api
             TouristClient.sharedInstance().flickrPhotosSearch(self.annotation!, completionHandler: { (success, result, error) -> Void in
@@ -103,10 +110,14 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                             (dictionary: [String: AnyObject]) -> Photo in
                             let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                             photo.pin = self.mapAnnotation
+                            self.downloaded++
+                            println("DOWNLOADED \(self.downloaded)")
                             return photo
                         }
-                        // Update the collection on the main thread
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.counter++
+                            println("async block - \(self.counter)")
+                            self.collectionButton.enabled = true
                             self.touristCollectionView.reloadData()
                         })
                         self.saveContext()
@@ -117,8 +128,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
             })
         } else {
-            //TODO: Anything needed?
             println("populate final else")
+            self.collectionButton.enabled = true
         }
     }
     
@@ -172,8 +183,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         cell.cellImage.image = UIImage(named: "Blank52")
         configureCell(cell, photo: photo)
-        counter += 1
-        println("collectionView cellForItemAtIndexPath: \(counter)")
+//        counter += 1
+//        println("collectionView cellForItemAtIndexPath: \(counter)")
         
         return cell
     }
@@ -268,9 +279,11 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     ///
     func deleteAllPhotos() {
         for photo in fetchedResultsController.fetchedObjects as! [Photo] {
+            deletedCounter++
+            println("DELETE ALL \(deletedCounter)")
             sharedContext.deleteObject(photo)
-            self.saveContext()
         }
+        self.saveContext()
     }
     
     ///

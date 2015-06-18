@@ -48,9 +48,9 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         // TODO: get map state from core data if it exists
         self.annotations = self.fetchAllPins()
         println("PIN COUNT: \(self.annotations.count)")
-        for i in self.annotations {
-            println("\(i.title) \(i.latitude) \(i.longitude)")
-        }
+//        for i in self.annotations {
+//            println("\(i.title) \(i.latitude) \(i.longitude)")
+//        }
         
         if self.annotations.count > 0 {
             var pins = placeAnnotations()

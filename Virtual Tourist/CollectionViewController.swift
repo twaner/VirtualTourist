@@ -96,8 +96,13 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         })
     }
     
+    ///
+    /// Populates pictures for a given Annotation. This method is called if there are no pictures related to the Annotation object.
+    ///
     func populate() {
         println("POPULATE COUNT \(self.mapAnnotation.photos.count)")
+        self.counter = 0
+        var photoCount = 0
         if self.mapAnnotation.photos.isEmpty {
             // Call Api
             TouristClient.sharedInstance().flickrPhotosSearch(self.annotation!, completionHandler: { (success, result, error) -> Void in
@@ -106,6 +111,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                     println("flickrPhotoSearch error: \(error)")
                 } else {
                     if let photosDictionaries = result as? [[String: AnyObject]] {
+                        println("DICTIOANRY COUNT \(photosDictionaries.count)")
                         var photos = photosDictionaries.map() {
                             (dictionary: [String: AnyObject]) -> Photo in
                             let photo = Photo(dictionary: dictionary, context: self.sharedContext)
@@ -122,7 +128,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                         })
                         self.saveContext()
                     } else {
-                        let error = NSError(domain: "Movie for Person Parsing. Cant find cast in \(result)", code: 0, userInfo: nil)
+                        let error = NSError(domain: "Photo for Annotaton: An error has taken place: \(result)", code: 0, userInfo: nil)
                         println(error)
                     }
                 }

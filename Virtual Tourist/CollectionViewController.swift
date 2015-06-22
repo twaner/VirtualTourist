@@ -17,6 +17,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var touristCollectionView: UICollectionView!
     @IBOutlet weak var collectionButton: UIBarButtonItem!
+    @IBOutlet weak var noPhotoLabel: UILabel!
     
     // MARK: - Props
     var mapState: MapState? = nil
@@ -50,6 +51,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.collectionButton.enabled = false
+        self.noPhotoLabel.hidden = true
+        self.noPhotoLabel.layer.cornerRadius = 12.0
         if self.mapAnnotation.photos.isEmpty {
             self.populate()
         } else {
@@ -112,6 +115,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                 } else {
                     if let photosDictionaries = result as? [[String: AnyObject]] {
                         println("DICTIOANRY COUNT \(photosDictionaries.count)")
+                        photoCount = photosDictionaries.count
                         var photos = photosDictionaries.map() {
                             (dictionary: [String: AnyObject]) -> Photo in
                             let photo = Photo(dictionary: dictionary, context: self.sharedContext)
@@ -122,9 +126,13 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                         }
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                             self.counter++
-                            println("async block - \(self.counter)")
-                            self.collectionButton.enabled = true
-                            self.touristCollectionView.reloadData()
+                            println("ASYNC BLOCK --- \(self.counter)")
+                            if photoCount > 0 {
+                                self.collectionButton.enabled = true
+                                self.touristCollectionView.reloadData()
+                            } else {
+                                self.noPhotoLabel.hidden = false
+                            }
                         })
                         self.saveContext()
                     } else {
@@ -134,7 +142,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                 }
             })
         } else {
-            println("populate final else")
             self.collectionButton.enabled = true
         }
     }

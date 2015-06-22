@@ -12,6 +12,8 @@
 	<dict>
 		<key>54D5B3C72E5B9AA49F96412F914B13819578B9B4</key>
 		<string>https://github.com/twaner/VirtualTourist.git</string>
+		<key>7379105D96DA06ECDA7392F6CD5CFF329A73C28C</key>
+		<string>github.com:twaner/Virtual-Tourist.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Virtual Tourist.xcodeproj/project.xcworkspace</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>54D5B3C72E5B9AA49F96412F914B13819578B9B4</key>
 		<string>../..</string>
+		<key>7379105D96DA06ECDA7392F6CD5CFF329A73C28C</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/twaner/VirtualTourist.git</string>
@@ -32,9 +36,17 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7379105D96DA06ECDA7392F6CD5CFF329A73C28C</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>54D5B3C72E5B9AA49F96412F914B13819578B9B4</string>
 			<key>IDESourceControlWCCName</key>
-			<string>development</string>
+			<string>development_repo</string>
 		</dict>
 	</array>
 </dict>

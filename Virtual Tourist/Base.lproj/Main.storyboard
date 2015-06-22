@@ -115,6 +115,16 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No photos for pin; Please search again!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YGR-Ss-Qhj">
+                                <rect key="frame" x="16" y="89" width="568" height="21"/>
+                                <color key="backgroundColor" red="0.0" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="tsO-jq-Dva"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -125,15 +135,21 @@
                             <constraint firstItem="rnB-yf-aIU" firstAttribute="leading" secondItem="BJY-d9-2KU" secondAttribute="leadingMargin" constant="-16" id="NTP-rP-xSn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="rnB-yf-aIU" secondAttribute="trailing" constant="-16" id="OXI-ha-qjX"/>
                             <constraint firstAttribute="trailing" secondItem="V8P-cj-lFG" secondAttribute="trailing" id="PU9-OP-Bzh"/>
+                            <constraint firstItem="rnB-yf-aIU" firstAttribute="top" secondItem="YGR-Ss-Qhj" secondAttribute="bottom" constant="25" id="ZsM-7H-raT"/>
                             <constraint firstItem="snJ-W8-8IA" firstAttribute="leading" secondItem="BJY-d9-2KU" secondAttribute="leading" id="fse-LS-aGM"/>
+                            <constraint firstAttribute="centerX" secondItem="YGR-Ss-Qhj" secondAttribute="centerX" id="nmE-JQ-wcf"/>
+                            <constraint firstItem="YGR-Ss-Qhj" firstAttribute="top" secondItem="Zcv-xZ-WCU" secondAttribute="bottom" constant="25" id="oiw-NS-fb7"/>
+                            <constraint firstItem="YGR-Ss-Qhj" firstAttribute="leading" secondItem="BJY-d9-2KU" secondAttribute="leading" constant="16" id="rub-TN-Ieq"/>
                             <constraint firstAttribute="trailing" secondItem="snJ-W8-8IA" secondAttribute="trailing" id="tFQ-yp-9Ec"/>
                             <constraint firstItem="snJ-W8-8IA" firstAttribute="top" secondItem="rnB-yf-aIU" secondAttribute="bottom" id="ujj-eV-yAT"/>
                             <constraint firstItem="snJ-W8-8IA" firstAttribute="top" secondItem="V8P-cj-lFG" secondAttribute="bottom" constant="420" id="vzC-08-epk"/>
+                            <constraint firstAttribute="trailing" secondItem="YGR-Ss-Qhj" secondAttribute="trailing" constant="16" id="xNq-bU-3We"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionButton" destination="EhS-LW-nMo" id="wYq-Ln-6Nq"/>
                         <outlet property="mapView" destination="V8P-cj-lFG" id="iJh-Jc-c45"/>
+                        <outlet property="noPhotoLabel" destination="YGR-Ss-Qhj" id="rrJ-8v-Ddu"/>
                         <outlet property="touristCollectionView" destination="rnB-yf-aIU" id="QA6-jC-62S"/>
                     </connections>
                 </viewController>

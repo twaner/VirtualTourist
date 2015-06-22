@@ -31,7 +31,7 @@ extension TouristClient {
             ParamaterKeys.ApiKey: Constants.FlickrApiKey,
             ParamaterKeys.Latitude: latitude,
             ParamaterKeys.Longitude: longitude,
-            ParamaterKeys.Radius: "2",
+            ParamaterKeys.Radius: "4",
             ParamaterKeys.Radius_Units: "1m",
             ParamaterKeys.Extras: "url_m",
             ParamaterKeys.DataFormat: "json",

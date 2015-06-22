@@ -54,6 +54,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.setMap()
     }
     
+//    func makeAnnotation(lat: Double, long: Double) -> MKPointAnnotation {
+//        
+//    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

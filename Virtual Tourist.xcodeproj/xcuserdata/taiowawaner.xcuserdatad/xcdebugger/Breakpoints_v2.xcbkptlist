@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/CollectionViewController.swift"
-            timestampString = "456628363.100172"
+            timestampString = "456628760.088261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70">
+            startingLineNumber = "69"
+            endingLineNumber = "69">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -376,11 +376,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/CollectionViewController.swift"
-            timestampString = "456628363.100172"
+            timestampString = "456628760.088261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67">
+            startingLineNumber = "66"
+            endingLineNumber = "66">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -390,11 +390,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/CollectionViewController.swift"
-            timestampString = "456628363.100172"
+            timestampString = "456628760.088261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110">
+            startingLineNumber = "86"
+            endingLineNumber = "86">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -404,11 +404,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/CollectionViewController.swift"
-            timestampString = "456628363.100172"
+            timestampString = "456628760.088261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200">
+            startingLineNumber = "176"
+            endingLineNumber = "176">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

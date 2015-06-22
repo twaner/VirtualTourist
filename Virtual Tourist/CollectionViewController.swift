@@ -20,12 +20,8 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBOutlet weak var noPhotoLabel: UILabel!
     
     // MARK: - Props
-//    var mapState: MapState? = nil
     var annotation: MKPointAnnotation? = nil
-    var region: MKCoordinateRegion? = nil
-    var photoArrayTmp: [[String: AnyObject]] = []
     var mapAnnotation: Annotation!
-    // NSFetchedResultsControllerDelegate with collection view
     var selectedIndexPaths = [NSIndexPath]()
     var deletedIndexPaths: [NSIndexPath]!
     var updatedIndexPaths: [NSIndexPath]!
@@ -64,6 +60,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     // MARK: - IBActions
     
+    /**
+    Deletes all Photo objects in the collection and populates the view with a new collection from a random page.
+    */
     @IBAction func collectionButtonTapped(sender: UIBarButtonItem) {
         // Delete all photos
         self.deleteAllPhotos()
@@ -72,30 +71,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     // MARK: - Helper methods
-    
-    ///
-    ///Uses the TouristClient in order to retrieve an array of dictionaries that is used to populate
-    ///
-    func getPhotosForLocation() {
-        
-        TouristClient.sharedInstance().flickrPhotosSearch(self.annotation!, completionHandler: { (success, result, error) -> Void in
-            
-            if let error = error {
-                println("ERROR \(error)")
-            } else {
-                if let photos = result as? [[String:AnyObject]] {
-                    println(result)
-                    self.photoArrayTmp = photos
-                    if self.photoArrayTmp.count > 0 {
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.touristCollectionView.reloadData()
-                        })
-                    }
-                }
-            }
-        })
-    }
-    
+       
     ///
     /// Populates pictures for a given Annotation. This method is called if there are no pictures related to the Annotation object.
     ///

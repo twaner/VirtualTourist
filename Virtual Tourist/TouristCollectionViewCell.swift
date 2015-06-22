@@ -8,8 +8,14 @@
 
 import UIKit
 
+/**
+A custom UICollectionView cell that inherits from TaskCancelingTableViewCell.
+
+*/
+
 class TouristCollectionViewCell: TaskCancelingTableViewCell {
-    
+    /// The cell's image.
     @IBOutlet weak var cellImage: UIImageView!
+    /// The cell's activity view.
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 }

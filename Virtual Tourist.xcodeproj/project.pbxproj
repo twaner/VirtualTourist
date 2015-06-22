@@ -22,7 +22,6 @@
 		19D84CC41B1BA39C002A3DB0 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D84CC31B1BA39C002A3DB0 /* ImageCache.swift */; };
 		19DB32A11B15419C0059EC37 /* Annotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DB32A01B15419C0059EC37 /* Annotation.swift */; };
 		19DB32A31B1541B00059EC37 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DB32A21B1541B00059EC37 /* Photo.swift */; };
-		19DB32A51B1542F80059EC37 /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DB32A41B1542F80059EC37 /* MapState.swift */; };
 		19DB32A91B169B190059EC37 /* TouristClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DB32A81B169B190059EC37 /* TouristClient.swift */; };
 		19DB32AB1B169C0A0059EC37 /* TouristConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DB32AA1B169C0A0059EC37 /* TouristConstants.swift */; };
 		7E0734631B214008001F1C49 /* TaskCancelingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0734621B214008001F1C49 /* TaskCancelingTableViewCell.swift */; };
@@ -58,7 +57,6 @@
 		19D84CC31B1BA39C002A3DB0 /* ImageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		19DB32A01B15419C0059EC37 /* Annotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Annotation.swift; sourceTree = "<group>"; };
 		19DB32A21B1541B00059EC37 /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
-		19DB32A41B1542F80059EC37 /* MapState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapState.swift; sourceTree = "<group>"; };
 		19DB32A81B169B190059EC37 /* TouristClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouristClient.swift; sourceTree = "<group>"; };
 		19DB32AA1B169C0A0059EC37 /* TouristConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouristConstants.swift; sourceTree = "<group>"; };
 		7E0734621B214008001F1C49 /* TaskCancelingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCancelingTableViewCell.swift; sourceTree = "<group>"; };
@@ -156,7 +154,6 @@
 				19DB32A01B15419C0059EC37 /* Annotation.swift */,
 				19D84CBF1B1B8322002A3DB0 /* CoreDataStackManager.swift */,
 				19D84CC31B1BA39C002A3DB0 /* ImageCache.swift */,
-				19DB32A41B1542F80059EC37 /* MapState.swift */,
 				19DB32A21B1541B00059EC37 /* Photo.swift */,
 				19DB32A81B169B190059EC37 /* TouristClient.swift */,
 				19DB32AA1B169C0A0059EC37 /* TouristConstants.swift */,
@@ -278,7 +275,6 @@
 			files = (
 				19DB32AB1B169C0A0059EC37 /* TouristConstants.swift in Sources */,
 				19D84CC41B1BA39C002A3DB0 /* ImageCache.swift in Sources */,
-				19DB32A51B1542F80059EC37 /* MapState.swift in Sources */,
 				196F10861B09426B00A2AC9E /* CollectionViewController.swift in Sources */,
 				196F10841B09376400A2AC9E /* TravelLocationMapViewController.swift in Sources */,
 				19DB32A91B169B190059EC37 /* TouristClient.swift in Sources */,

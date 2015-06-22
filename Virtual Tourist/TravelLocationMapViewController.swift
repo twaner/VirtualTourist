@@ -22,9 +22,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     // These are to handle new pins that are dropped
     var location: CLLocation? = nil
     var locationPlacemark: MKPlacemark? = nil
-    var mapState: MapState? = nil
     var annotation: MKPointAnnotation? = nil
-    var tapCount = 0
     var region: MKCoordinateRegion? = nil
     var annotations = [Annotation]()
     var anno: Annotation? = nil
@@ -45,17 +43,10 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        // TODO: get map state from core data if it exists
         self.annotations = self.fetchAllPins()
-        println("PIN COUNT: \(self.annotations.count)")
-//        for i in self.annotations {
-//            println("\(i.title) \(i.latitude) \(i.longitude)")
-//        }
-        
         if self.annotations.count > 0 {
             var pins = placeAnnotations()
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
                 self.mapView.showAnnotations(pins, animated: true)
             })
         }
@@ -65,6 +56,11 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         super.didReceiveMemoryWarning()
     }
     
+    /**
+    Creates an array of MKPointAnnotations.
+    
+    :returns: Array of MKPointAnnotation.
+    */
     func placeAnnotations() -> [MKPointAnnotation] {
         var pinArray = [MKPointAnnotation]()
         for i in self.annotations {
@@ -76,8 +72,6 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     // MARK: - Actions
     
     func tap(gestureRecognizer: UIGestureRecognizer) {
-        println("Tapped \(tapCount)")
-        tapCount += 1
         var touchPoint = gestureRecognizer.locationInView(self.mapView)
         
         if .Began == gestureRecognizer.state {
@@ -87,15 +81,16 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
             
             var newLocation: CLLocation = CLLocation(latitude: newCoordinate.latitude, longitude: newCoordinate.longitude)
             let region = self.mapView.region
-            println("\(region.span.latitudeDelta) \(region.span.longitudeDelta)")
-            self.mapState = MapState(region: region)
             self.getLocations(newLocation)
             self.region = region
         }
     }
     
-    ///
-    ///Uses a CLLocation to reverse Geocode a location and return an MKPlacemark
+    /**
+    Gets Locations.
+    
+    :param: location CLLocation that will be geocoded.
+    */
     func getLocations(location: CLLocation) {
         var geoCoder: CLGeocoder = CLGeocoder()
         geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
@@ -112,6 +107,11 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         })
     }
     
+    /**
+    Updates a map by converting a placemark into an MKPointAnnotation to add to the map and an Annotation to save in core data.
+    
+    :param: placemark MKPlacemark placemark to be added to map and created as an Annotation in core data.
+    */
     func updateMap(placemark: MKPlacemark) {
         let latitude = placemark.coordinate.latitude
         let longitude = placemark.coordinate.longitude
@@ -121,11 +121,10 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         annotation.coordinate = location
         annotation.title = placemark.locality
         annotation.subtitle = placemark.administrativeArea
-        //TODO: Put on main thread
-        self.mapView.addAnnotation(annotation)
-        self.mapView.showAnnotations([annotation], animated: true)
-        
-        // Save data
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.mapView.addAnnotation(annotation)
+            self.mapView.showAnnotations([annotation], animated: true)
+        })
         var mapAnnotation = Annotation(latitude: latitude, longitude: longitude, title: annotation.title, subtitle: annotation.subtitle, context: self.sharedContext)
         self.saveContext()
     }
@@ -133,47 +132,15 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     
     // MARK: - MKMapViewDelegate
     
-    func getCoordinates(address: String?) {
-        self.displayActivityView(true)
-        var geoCoder: CLGeocoder = CLGeocoder()
-
-        // OLD CODE
-        geoCoder.geocodeAddressString(address, completionHandler: { (placemarks: [AnyObject]!, error: NSError!) -> Void in
-            println("geoCoder")
-            if let error = error {
-                println("getCoordinates error \(error)")
-                self.displayActivityView(false)
-            } else {
-                if (placemarks != nil && placemarks.count > 0) {
-                    let result = placemarks[0] as! CLPlacemark
-                    self.locationPlacemark = MKPlacemark(placemark: result)
-                    self.displayActivityView(false)
-                    println("geocodeAddressString -> \(self.locationPlacemark)")
-//                    self.performSegueWithIdentifier("CollectionSegue", sender: self)
-                } else {
-                    println("Issue with placemark")
-                    // TODO: Warning failed to post placemark
-                    self.displayActivityView(false)
-                }
-            }
-        })
-    }
-    
     func mapViewWillStartLoadingMap(mapView: MKMapView!) {
-        // TODO: start spinner
-//        println("mapViewWillStartLoadingMap")
         self.displayActivityView(true)
     }
     
     func mapViewDidFinishLoadingMap(mapView: MKMapView!) {
-//        println("mapViewDidFinishLoadingMap")
-//        println("\(mapView.region.span.longitudeDelta) \(mapView.region.span.latitudeDelta)")
         self.displayActivityView(false)
     }
 
     func mapViewDidFinishRenderingMap(mapView: MKMapView!, fullyRendered: Bool) {
-        // TODO: stop spinner
-//        println("mapViewDidFinishRenderingMap")
         self.displayActivityView(false)
     }
     
@@ -262,13 +229,19 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let vc = segue.destinationViewController as! CollectionViewController
-        vc.mapState = self.mapState
         vc.annotation = self.annotation
         vc.mapAnnotation = self.anno
     }
     
     // MARK: - Core Data Convenience
     
+    /**
+    Fetches a Pin from core data using a double predicate.
+
+    :param: lat Latitude of select MKPointAnnotation
+    :param: long Longitude of select MKPointAnnotation
+    :returns: Annotation
+    */
     func fetchPin(lat: Double, long: Double) -> Annotation? {
         let error: NSErrorPointer = nil
         let fetchRequest = NSFetchRequest(entityName: "Annotation")
@@ -291,6 +264,10 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         return pin
     }
     
+    ///
+    /// Fetches all Annotation objects.
+    ///
+    /// :returns: Array of Annotations.
     func fetchAllPins() -> [Annotation] {
         let error: NSErrorPointer = nil
         // Create request

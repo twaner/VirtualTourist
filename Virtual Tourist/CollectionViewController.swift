@@ -20,7 +20,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     @IBOutlet weak var noPhotoLabel: UILabel!
     
     // MARK: - Props
-    var mapState: MapState? = nil
+//    var mapState: MapState? = nil
     var annotation: MKPointAnnotation? = nil
     var region: MKCoordinateRegion? = nil
     var photoArrayTmp: [[String: AnyObject]] = []
@@ -30,9 +30,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     var deletedIndexPaths: [NSIndexPath]!
     var updatedIndexPaths: [NSIndexPath]!
     var insertedIndexPaths: [NSIndexPath]!
-    var counter = 0
-    var deletedCounter = 0
-    var downloaded = 0
     
     // MARK: - Lifecycle
     
@@ -103,8 +100,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     /// Populates pictures for a given Annotation. This method is called if there are no pictures related to the Annotation object.
     ///
     func populate() {
-        println("POPULATE COUNT \(self.mapAnnotation.photos.count)")
-        self.counter = 0
         var photoCount = 0
         if self.mapAnnotation.photos.isEmpty {
             // Call Api
@@ -114,19 +109,14 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                     println("flickrPhotoSearch error: \(error)")
                 } else {
                     if let photosDictionaries = result as? [[String: AnyObject]] {
-                        println("DICTIOANRY COUNT \(photosDictionaries.count)")
                         photoCount = photosDictionaries.count
                         var photos = photosDictionaries.map() {
                             (dictionary: [String: AnyObject]) -> Photo in
                             let photo = Photo(dictionary: dictionary, context: self.sharedContext)
                             photo.pin = self.mapAnnotation
-                            self.downloaded++
-                            println("DOWNLOADED \(self.downloaded)")
                             return photo
                         }
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.counter++
-                            println("ASYNC BLOCK --- \(self.counter)")
                             if photoCount > 0 {
                                 self.collectionButton.enabled = true
                                 self.touristCollectionView.reloadData()
@@ -146,14 +136,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    // This might not be need/clean up and jsut drop the pin
+    /**
+    Sets an MKPointAnnotation on the map to represent the Annotation object.
+    */
     func setMap() {
-        
-        if let mapState = self.mapState {
-                self.mapView.setRegion(self.mapState!.region!, animated: true)
-        } else {
-            println("Could not set the region")
-        }
         
         let location = CLLocationCoordinate2D(latitude: Double(self.mapAnnotation.latitude), longitude: Double(self.mapAnnotation.longitude))
         let annotation = MKPointAnnotation()
@@ -292,8 +278,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     ///
     func deleteAllPhotos() {
         for photo in fetchedResultsController.fetchedObjects as! [Photo] {
-            deletedCounter++
-            println("DELETE ALL \(deletedCounter)")
             sharedContext.deleteObject(photo)
         }
         self.saveContext()

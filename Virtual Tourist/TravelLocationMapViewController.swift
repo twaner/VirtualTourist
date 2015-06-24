@@ -125,7 +125,11 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
             self.mapView.addAnnotation(annotation)
             self.mapView.showAnnotations([annotation], animated: true)
         })
-        var mapAnnotation = Annotation(latitude: latitude, longitude: longitude, title: annotation.title, subtitle: annotation.subtitle, context: self.sharedContext)
+        
+        let title = annotation.title ?? "Untitled location"
+        let subtitle = annotation.subtitle ?? ""
+        
+        var mapAnnotation = Annotation(latitude: latitude, longitude: longitude, title: title, subtitle: subtitle, context: self.sharedContext)
         self.saveContext()
     }
 

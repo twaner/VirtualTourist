@@ -57,7 +57,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     }
     
     /**
-    Creates an array of MKPointAnnotations.
+    Creates an array of MKPointAnnotations from Annotations that are stored in core data.
     
     :returns: Array of MKPointAnnotation.
     */
@@ -71,6 +71,11 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     
     // MARK: - Actions
     
+    /**
+    Recognizes a tap on the screen and gets the location so a pin can be added to the map.
+    
+    :param: gestureRecognizer UIGestureRecognizer that recognizes user's tap.
+    */
     func tap(gestureRecognizer: UIGestureRecognizer) {
         var touchPoint = gestureRecognizer.locationInView(self.mapView)
         
@@ -87,7 +92,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     }
     
     /**
-    Gets Locations.
+    Gets Locations and and updates the map with the Placemarks.
     
     :param: location CLLocation that will be geocoded.
     */
@@ -132,7 +137,6 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         var mapAnnotation = Annotation(latitude: latitude, longitude: longitude, title: title, subtitle: subtitle, context: self.sharedContext)
         self.saveContext()
     }
-
     
     // MARK: - MKMapViewDelegate
     
@@ -147,6 +151,7 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func mapViewDidFinishRenderingMap(mapView: MKMapView!, fullyRendered: Bool) {
         self.displayActivityView(false)
     }
+    
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         
@@ -210,21 +215,21 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         }
     }
 
+    /**
+    Updates a map based on the users location.
     
+    :param: userLocation CLLocation to get location information from.
+    :param: mapView MKMapView to be updated.
+    */
     func mapUpdater(userLocation: CLLocation, mapView: MKMapView) {
         var latitude: CLLocationDegrees = userLocation.coordinate.latitude
         var longitude: CLLocationDegrees = userLocation.coordinate.longitude
         
         var latDetal: CLLocationDegrees = 0.01
         var longDetal: CLLocationDegrees = 0.01
-        
         var span: MKCoordinateSpan = MKCoordinateSpanMake(latDetal, longDetal)
-        println("SPAN \(span)")
-        
         var location: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
-        
         var region: MKCoordinateRegion = MKCoordinateRegionMake(location, span)
-        
         
         mapView.setRegion(region, animated: true)
     }

@@ -18,7 +18,6 @@ class Photo: NSManagedObject {
         static let Title = "title"
     }
     
-    //TODO: The image might ned to be stored as NSData then the data converted to image in code.
     @NSManaged var image: UIImage?
     @NSManaged var title: String?
     @NSManaged var imagePath: String?
@@ -37,7 +36,6 @@ class Photo: NSManagedObject {
         self.title = dictionary[Keys.Title] as? String
     }
     
-    
     var photoImage: UIImage? {
         get {
             return TouristClient.Caches.imageCache.imageWithIdentifier(imagePath)
@@ -47,4 +45,3 @@ class Photo: NSManagedObject {
         }
     }
 }
-//pinkstone.co.uk/how-to-save-a-uiimage-in-core-data-and-retrieve-it/

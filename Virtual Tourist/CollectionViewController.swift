@@ -54,10 +54,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.setMap()
     }
     
-//    func makeAnnotation(lat: Double, long: Double) -> MKPointAnnotation {
-//        
-//    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -86,7 +82,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
             TouristClient.sharedInstance().flickrPhotosSearch(self.annotation!, completionHandler: { (success, result, error) -> Void in
 
                 if let error = error {
-                    println("flickrPhotoSearch error: \(error)")
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.displayUIAlertController("Error populating collection", message: "\(error)", action: "Ok")
+                    })
                 } else {
                     if let photosDictionaries = result as? [[String: AnyObject]] {
                         photoCount = photosDictionaries.count
@@ -107,7 +105,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                         self.saveContext()
                     } else {
                         let error = NSError(domain: "Photo for Annotaton: An error has taken place: \(result)", code: 0, userInfo: nil)
-                        println(error)
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            self.displayUIAlertController("Error getting photos", message: "\(error)", action: "Ok")
+                        })
                     }
                 }
             })
@@ -147,7 +147,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-        println("number of cells \(sectionInfo.numberOfObjects)")
         return sectionInfo.numberOfObjects
     }
     
@@ -162,9 +161,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
         cell.cellImage.image = UIImage(named: "Blank52")
         configureCell(cell, photo: photo)
-//        counter += 1
-//        println("collectionView cellForItemAtIndexPath: \(counter)")
-        
         return cell
     }
     
@@ -183,7 +179,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         } else {
             let task = TouristClient.sharedInstance().taskForCreatingImage(photo.imagePath!) { (imageData, error) -> Void in
                 if let error = error {
-                    println("Poster download error: \(error.localizedDescription)")
+
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.displayUIAlertController("Error getting photos", message: "Poster download error: \(error.localizedDescription)", action: "Ok")
+                    })
                 }
                 if let data = imageData {
                     let image = UIImage(data: data)
@@ -207,22 +206,18 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.insertedIndexPaths = [NSIndexPath]()
         self.deletedIndexPaths = [NSIndexPath]()
         self.updatedIndexPaths = [NSIndexPath]()
-        println("controllerWillChangeContent")
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         
         switch type {
             case .Insert:
-                println("Insert called")
                 self.insertedIndexPaths.append(newIndexPath!)
                 break
             case .Delete:
-                println("delete called")
                 self.deletedIndexPaths.append(indexPath!)
                 break
             case .Update:
-                println("Update called")
                 self.updatedIndexPaths.append(indexPath!)
                 break
             case .Move:
@@ -233,8 +228,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        println("controllerDidChangeContent")
-        
         self.touristCollectionView.performBatchUpdates({() -> Void in
             for indexPath in self.insertedIndexPaths {
                 self.touristCollectionView.insertItemsAtIndexPaths([indexPath])

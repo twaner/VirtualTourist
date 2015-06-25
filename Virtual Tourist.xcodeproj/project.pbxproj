@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1958B4461B3CC15F00F4A61D /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1958B4451B3CC15F00F4A61D /* ViewControllerExtension.swift */; };
 		196F10621B09370100A2AC9E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196F10611B09370100A2AC9E /* AppDelegate.swift */; };
 		196F10671B09370100A2AC9E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 196F10651B09370100A2AC9E /* Main.storyboard */; };
 		196F10691B09370100A2AC9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 196F10681B09370100A2AC9E /* Images.xcassets */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1958B4451B3CC15F00F4A61D /* ViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerExtension.swift; sourceTree = "<group>"; };
 		196F105C1B09370100A2AC9E /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		196F10601B09370100A2AC9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		196F10611B09370100A2AC9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			children = (
 				196F10831B09376400A2AC9E /* TravelLocationMapViewController.swift */,
 				196F10851B09426B00A2AC9E /* CollectionViewController.swift */,
+				1958B4451B3CC15F00F4A61D /* ViewControllerExtension.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 			files = (
 				19DB32AB1B169C0A0059EC37 /* TouristConstants.swift in Sources */,
 				19D84CC41B1BA39C002A3DB0 /* ImageCache.swift in Sources */,
+				1958B4461B3CC15F00F4A61D /* ViewControllerExtension.swift in Sources */,
 				196F10861B09426B00A2AC9E /* CollectionViewController.swift in Sources */,
 				196F10841B09376400A2AC9E /* TravelLocationMapViewController.swift in Sources */,
 				19DB32A91B169B190059EC37 /* TouristClient.swift in Sources */,

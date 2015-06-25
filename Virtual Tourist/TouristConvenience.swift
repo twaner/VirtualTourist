@@ -46,7 +46,6 @@ extension TouristClient {
             } else {
                 if let photoDictionary = result!.valueForKey(JSONResponseKeys.Photos) as? NSDictionary {
                     if let photoArray = photoDictionary.valueForKey(JSONResponseKeys.Photo) as? [[String: AnyObject]] {
-                        println("PhotoArray \(photoArray)")
                         completionHandler(success: true, result: photoArray, error: nil)
                     }
                 }
@@ -56,8 +55,6 @@ extension TouristClient {
     
     func taskForCreatingImage(filePath: String, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask {
         let url = NSURL(string: filePath)
-        
-//        println("taskForCreatingImage imageUrl: \(filePath)")
         
         let request = NSURLRequest(URL: NSURL(string: filePath)!)
         let task = session.dataTaskWithRequest(request) {
@@ -72,6 +69,3 @@ extension TouristClient {
         return task
     }
 }
-
-
-//        method=flickr.photos.search&api_key=cc4e0bbebaac27eb3fe7f90fe3003e8a&accuracy=3&lat=41.8831922&lon=-87.6431329&radius=1&radius_units=mi&extras=url_m&format=json&nojsoncallback=1&auth_token=72157653159417620-cddff9ca3c9f42a8&api_sig=62a05877450a04daf0b1207dfb599aca

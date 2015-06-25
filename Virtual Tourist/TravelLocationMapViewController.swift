@@ -99,15 +99,18 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func getLocations(location: CLLocation) {
         var geoCoder: CLGeocoder = CLGeocoder()
         geoCoder.reverseGeocodeLocation(location, completionHandler: { (placemarks, error) -> Void in
-            
             if let error = error {
-                println("getLocation error \(error)")
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.displayUIAlertController("Error getting locations", message: "\(error)", action: "Ok")
+                })
             } else if placemarks.count > 0 {
                 let placemark = placemarks.first as! CLPlacemark
                 self.locationPlacemark = MKPlacemark(placemark: placemark)
                 self.updateMap(self.locationPlacemark!)
             } else{
-                println("getLocations - no placemarks returned")
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.displayUIAlertController("Info", message: "No locations found.", action: "Ok")
+                })
             }
         })
     }
@@ -183,7 +186,6 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         let compoundPredicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [predicate, predicate1])
         
         self.anno = self.fetchPin(lat.doubleValue, long: long.doubleValue)
-        
         self.performSegueWithIdentifier("CollectionSegue", sender: self)
     }
     
@@ -196,7 +198,6 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         var userLocation: CLLocation = locations[0] as! CLLocation
         self.mapUpdater(userLocation, mapView: self.mapView)
-//        println("locationManager - \(userLocation)")
     }
 
     // MARK: - Helper methods
@@ -254,10 +255,8 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     func fetchPin(lat: Double, long: Double) -> Annotation? {
         let error: NSErrorPointer = nil
         let fetchRequest = NSFetchRequest(entityName: "Annotation")
-        
         var lat = "\(lat)"
         var long = "\(long)"
-        
         let predicate = NSPredicate(format: "latitude == %@", lat)
         let predicate1 = NSPredicate(format: "longitude == %@", long)
         let compoundPredicate = NSCompoundPredicate.andPredicateWithSubpredicates([predicate, predicate1])
@@ -267,7 +266,6 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
         let pin2 = self.sharedContext.executeFetchRequest(fetchRequest, error: error) as! [Annotation]
         let pin = self.sharedContext.executeFetchRequest(fetchRequest, error: error)?.first as! Annotation
         if error != nil {
-            println("Error getting pin \(error)")
             return nil
         }
         return pin
@@ -279,14 +277,12 @@ class TravelLocationMapViewController: UIViewController,MKMapViewDelegate, CLLoc
     /// :returns: Array of Annotations.
     func fetchAllPins() -> [Annotation] {
         let error: NSErrorPointer = nil
-        // Create request
+
         let fetchRequest = NSFetchRequest(entityName: "Annotation")
-        
-        // execute
         let results = self.sharedContext.executeFetchRequest(fetchRequest, error: error)
         
         if error != nil {
-            print("Error in fetchAllPins() \(error)")
+            
         }
         return results as! [Annotation]
     }

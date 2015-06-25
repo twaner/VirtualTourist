@@ -22,6 +22,14 @@ class TouristClient {
     
     // MARK: - Flickr Helpers
     
+    /**
+    A helper method that is used to call get REST methods from flickr.
+    
+    :param: method Name of the method that will be used.
+    :param: parameters Dictionary of parameters for the method.
+    :param: completionHandler completionHandler for method.
+    :returns: NSURLSessionDataTask
+    */
     func flickrGetHelper(method: String, parameters: [String: AnyObject], completionHandler: (result: AnyObject?, error: NSError?) -> Void) -> NSURLSessionDataTask {
 
         let urlString = TouristClient.Constants.FlickrURL +  TouristClient.escapedParameters(parameters)
@@ -65,7 +73,6 @@ class TouristClient {
                 return NSError(domain: "OTM Error", code: 1, userInfo: userInfo)
             }
         }
-        
         return error
     }
     
@@ -91,7 +98,6 @@ class TouristClient {
         var urlVars = [String]()
         
         for (key, value) in parameters {
-            
             /* Make sure that it is a string value */
             let stringValue = "\(value)"
             
@@ -100,9 +106,7 @@ class TouristClient {
             
             /* Append it */
             urlVars += [key + "=" + "\(escapedValue!)"]
-            
         }
-        
         return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
     }
     

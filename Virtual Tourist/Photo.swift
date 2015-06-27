@@ -38,10 +38,12 @@ class Photo: NSManagedObject {
     
     var photoImage: UIImage? {
         get {
-            return TouristClient.Caches.imageCache.imageWithIdentifier(imagePath)
+            return TouristClient.DocumentAccessor.imageAccessor.imageWithIdentifier(imagePath)
+//            return TouristClient.Caches.imageCache.imageWithIdentifier(imagePath)
         }
         set {
-            TouristClient.Caches.imageCache.storeImage(newValue, withIdentifier: imagePath!)
+            TouristClient.DocumentAccessor.imageAccessor.storeImage(newValue, withIdentifier: imagePath!)
+//            TouristClient.Caches.imageCache.storeImage(newValue, withIdentifier: imagePath!)
         }
     }
 }

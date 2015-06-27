@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1958B4461B3CC15F00F4A61D /* ViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1958B4451B3CC15F00F4A61D /* ViewControllerExtension.swift */; };
+		1958B4481B3CD19000F4A61D /* ImageDocumentDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1958B4471B3CD19000F4A61D /* ImageDocumentDirectory.swift */; };
 		196F10621B09370100A2AC9E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196F10611B09370100A2AC9E /* AppDelegate.swift */; };
 		196F10671B09370100A2AC9E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 196F10651B09370100A2AC9E /* Main.storyboard */; };
 		196F10691B09370100A2AC9E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 196F10681B09370100A2AC9E /* Images.xcassets */; };
@@ -40,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		1958B4451B3CC15F00F4A61D /* ViewControllerExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerExtension.swift; sourceTree = "<group>"; };
+		1958B4471B3CD19000F4A61D /* ImageDocumentDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDocumentDirectory.swift; sourceTree = "<group>"; };
 		196F105C1B09370100A2AC9E /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		196F10601B09370100A2AC9E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		196F10611B09370100A2AC9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				19DB32AA1B169C0A0059EC37 /* TouristConstants.swift */,
 				19AF7F8F1B16B17A00C589C6 /* TouristConvenience.swift */,
 				19D84CBC1B1A9E81002A3DB0 /* Model.xcdatamodeld */,
+				1958B4471B3CD19000F4A61D /* ImageDocumentDirectory.swift */,
 			);
 			name = TouristClient;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				196F10861B09426B00A2AC9E /* CollectionViewController.swift in Sources */,
 				196F10841B09376400A2AC9E /* TravelLocationMapViewController.swift in Sources */,
 				19DB32A91B169B190059EC37 /* TouristClient.swift in Sources */,
+				1958B4481B3CD19000F4A61D /* ImageDocumentDirectory.swift in Sources */,
 				19D84CC01B1B8322002A3DB0 /* CoreDataStackManager.swift in Sources */,
 				19D84CBB1B1A3E94002A3DB0 /* TouristCollectionViewCell.swift in Sources */,
 				19DB32A11B15419C0059EC37 /* Annotation.swift in Sources */,

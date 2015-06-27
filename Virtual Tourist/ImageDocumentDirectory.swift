@@ -1,56 +1,38 @@
 //
-//  ImageCache.swift
+//  ImageDocumentDirectory.swift
 //  Virtual Tourist
 //
-//  Created by Taiowa Waner on 5/31/15.
+//  Created by Taiowa Waner on 6/25/15.
 //  Copyright (c) 2015 Taiowa Waner. All rights reserved.
 //
 
 import UIKit
 
-class ImageCache {
+class ImageDocumentDirectory {
     
-    private var inMemoryCache = NSCache()
-
-    // MARK: - Get images
+    private var fileManager = NSFileManager.defaultManager()
     
     func imageWithIdentifier(identifier: String?) -> UIImage? {
-        
         if identifier == nil || identifier != "" {
             return nil
         }
-        
         let path = pathForIdentifier(identifier!)
         var data: NSData?
-        
-        // Memory
-        if let image = inMemoryCache.objectForKey(path) as? UIImage {
-            return image
-        }
-        
-        // Local
         if let data = NSData(contentsOfFile: path) {
+            println("IN imageWithIdentifier DATA \(data)")
             return UIImage(data: data)
         }
         return nil
     }
-    var fileManager = NSFileManager.defaultManager()
+    
     func storeImage(image: UIImage?, withIdentifier identifier: String) {
         let path = pathForIdentifier(identifier)
-        
-        // if nil, remove from cache
         if image == nil {
-            inMemoryCache.removeObjectForKey(path)
-            NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+            fileManager.removeItemAtPath(path, error: nil)
             return
         }
-        // keep in memory
-        inMemoryCache.setObject(image!, forKey: path)
-        // doc directory
         let data = UIImagePNGRepresentation(image!)
         data.writeToFile(path, atomically: true)
-        
-        // Test if saved
         
         var loaded = UIImage(contentsOfFile: path)
         if loaded == nil {
@@ -65,15 +47,19 @@ class ImageCache {
         //        for i in fileList {
         //            println("Filelist \(i)")
         //        }
+
         #if arch(i386) || arch(x86_64)
-            let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString
+            let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
             NSLog("Document Path: %@", documentsPath)
+            let fileList2 = fileManager.contentsOfDirectoryAtPath(documentsPath, error: &error) as! [String]
+            println("FILELIST COUNT2 \(fileList2.count)")
         #endif
     }
     
     func pathForIdentifier(identifier: String) -> String {
-        let docDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
-        let url = docDirectoryURL.URLByAppendingPathComponent(identifier)
+        let docDirectoryURL: NSURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
+        let url = docDirectoryURL.URLByAppendingPathComponent(identifier.lastPathComponent)
+
         return url.path!
     }
 }

@@ -122,4 +122,8 @@ class TouristClient {
     struct Caches {
         static let imageCache = ImageCache()
     }
+    
+    struct DocumentAccessor {
+        static let imageAccessor = ImageDocumentDirectory()
+    }
 }

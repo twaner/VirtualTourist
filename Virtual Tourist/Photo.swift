@@ -36,14 +36,16 @@ class Photo: NSManagedObject {
         self.title = dictionary[Keys.Title] as? String
     }
     
+    override func prepareForDeletion() {
+        TouristClient.DocumentAccessor.imageAccessor.deleteImage(self.imagePath!)
+    }
+    
     var photoImage: UIImage? {
         get {
             return TouristClient.DocumentAccessor.imageAccessor.imageWithIdentifier(imagePath)
-//            return TouristClient.Caches.imageCache.imageWithIdentifier(imagePath)
         }
         set {
             TouristClient.DocumentAccessor.imageAccessor.storeImage(newValue, withIdentifier: imagePath!)
-//            TouristClient.Caches.imageCache.storeImage(newValue, withIdentifier: imagePath!)
         }
     }
 }

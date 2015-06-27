@@ -19,12 +19,29 @@ class ImageDocumentDirectory {
         let path = pathForIdentifier(identifier!)
         var data: NSData?
         if let data = NSData(contentsOfFile: path) {
-            println("IN imageWithIdentifier DATA \(data)")
             return UIImage(data: data)
         }
         return nil
     }
     
+    /**
+    Deletes an image from the document directory if the file exists at the path.
+    
+    :param: identifier filename to be turned into the path.
+    */
+    func deleteImage(identifier: String){
+        var error: NSError?
+        if fileManager.fileExistsAtPath(pathForIdentifier(identifier)) {
+            fileManager.removeItemAtPath(pathForIdentifier(identifier), error: &error)
+        }
+    }
+    
+    /**
+    Stores an image from the document directory if the image exists or else it will remove the item from the doc directory.
+    
+    :param: image Image the to be stored.
+    :param: identifier String that will be used to create the file path.
+    */
     func storeImage(image: UIImage?, withIdentifier identifier: String) {
         let path = pathForIdentifier(identifier)
         if image == nil {
@@ -33,29 +50,13 @@ class ImageDocumentDirectory {
         }
         let data = UIImagePNGRepresentation(image!)
         data.writeToFile(path, atomically: true)
-        
-        var loaded = UIImage(contentsOfFile: path)
-        if loaded == nil {
-            println("IMAGE NOT SAVED")
-        } else {
-            println("IMAGE SAVED")
-        }
-        
-        var error: NSError?
-        let fileList = fileManager.contentsOfDirectoryAtPath("/", error: &error) as! [String]
-        println("FILELIST COUNT \(fileList.count)")
-        //        for i in fileList {
-        //            println("Filelist \(i)")
-        //        }
-
-        #if arch(i386) || arch(x86_64)
-            let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
-            NSLog("Document Path: %@", documentsPath)
-            let fileList2 = fileManager.contentsOfDirectoryAtPath(documentsPath, error: &error) as! [String]
-            println("FILELIST COUNT2 \(fileList2.count)")
-        #endif
     }
     
+    /**
+    Creates a path from the file's name that it willbe stored at.
+    
+    :param: identifier filename to be turned into the path.
+    */
     func pathForIdentifier(identifier: String) -> String {
         let docDirectoryURL: NSURL = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
         let url = docDirectoryURL.URLByAppendingPathComponent(identifier.lastPathComponent)

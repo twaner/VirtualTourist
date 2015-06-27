@@ -268,6 +268,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         
         for photo in photoToDelete {
             sharedContext.deleteObject(photo)
+            // Called after prepare for deletion
             self.saveContext()
         }
         self.selectedIndexPaths = [NSIndexPath]()

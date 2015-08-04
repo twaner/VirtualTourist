@@ -46,6 +46,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         self.collectionButton.enabled = false
         self.noPhotoLabel.hidden = true
         self.noPhotoLabel.layer.cornerRadius = 12.0
+        self.noPhotoLabel.clipsToBounds = true
         if self.mapAnnotation.photos.isEmpty {
             self.populate()
         } else {
